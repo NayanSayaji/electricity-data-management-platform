@@ -23,7 +23,11 @@
 
 ### Bill Calculation Formula
 
-\[ \text{Total Amount} = (\text{Base Rate} \times \text{Units Consumed}) - (\text{Base Rate} \times \text{Units Consumed} \times \text{Discount}) \]
+```
+Base Rate * Units Consumed = Amount
+Apply discount based on meter type
+Total Amount = Amount - (Amount * Discount)
+```
 
 ### Technology Stack
 
@@ -32,36 +36,6 @@
 - **ORM**: Sequelize
 - **Authentication**: JWT (JSON Web Tokens)
 - **Email Service**:
-
-## API Endpoints (High-Level)
-
-- **Auth**:
-  - `POST api/v1/auth/register`
-  - `POST api/v1/auth/login`
-- **User**:
-  - `GET api/v1/users/:id`
-  - `GET api/v1/users/:id/bills`
-  - `GET api/v1/users/:id/tickets`
-  - `POST api/v1/users/:id/tickets`
-- **Admin**:
-  - `GET api/v1/admin/users`
-  - `GET api/v1/admin/boards`
-  - `POST api/v1/admin/boards`
-  - `PUT api/v1/admin/boards/:id`
-  - `DELETE api/v1/admin/boards/:id`
-  - `GET api/v1/admin/roles`
-  - `POST api/v1/admin/roles`
-  - `PUT api/v1/admin/roles/:id`
-  - `DELETE api/v1/admin/roles/:id`
-- **Field Worker**:
-  - `POST api/v1/readings`
-  - `PUT api/v1/readings/:id`
-- **Bill**:
-  - `GET api/v1/bills/:id`
-  - `POST api/v1/generate`
-- **Ticket**:
-  - `GET api/v1/tickets`
-  - `PUT api/v1/tickets/:id`
 
 ## Setup and Installation
 
@@ -93,125 +67,124 @@
 ### Users
 
 | Column Name | Data Type | Constraints           |
-|-------------|------------|-----------------------|
-| id          | INTEGER    | Primary Key           |
-| name        | STRING     | Not Null              |
-| email       | STRING     | Not Null, Unique      |
-| password    | STRING     | Not Null              |
-| role_id     | INTEGER    | Foreign Key, Not Null |
-| board_id    | INTEGER    | Foreign Key, Nullable |
-| created_at  | DATE       | Not Null              |
-| updated_at  | DATE       | Not Null              |
+| ----------- | --------- | --------------------- |
+| id          | INTEGER   | Primary Key           |
+| name        | STRING    | Not Null              |
+| email       | STRING    | Not Null, Unique      |
+| password    | STRING    | Not Null              |
+| role_id     | INTEGER   | Foreign Key, Not Null |
+| board_id    | INTEGER   | Foreign Key, Nullable |
+| created_at  | DATE      | Not Null              |
+| updated_at  | DATE      | Not Null              |
 
 ### Roles
 
 | Column Name | Data Type | Constraints |
-|-------------|------------|-------------|
-| id          | INTEGER    | Primary Key |
-| name        | STRING     | Not Null    |
-| created_at  | DATE       | Not Null    |
-| updated_at  | DATE       | Not Null    |
+| ----------- | --------- | ----------- |
+| id          | INTEGER   | Primary Key |
+| name        | STRING    | Not Null    |
+| created_at  | DATE      | Not Null    |
+| updated_at  | DATE      | Not Null    |
 
 ### Boards
 
 | Column Name | Data Type | Constraints |
-|-------------|------------|-------------|
-| id          | INTEGER    | Primary Key |
-| name        | STRING     | Not Null    |
-| base_rate   | DECIMAL    | Not Null    |
-| created_at  | DATE       | Not Null    |
-| updated_at  | DATE       | Not Null    |
+| ----------- | --------- | ----------- |
+| id          | INTEGER   | Primary Key |
+| name        | STRING    | Not Null    |
+| base_rate   | DECIMAL   | Not Null    |
+| created_at  | DATE      | Not Null    |
+| updated_at  | DATE      | Not Null    |
 
 ### Meters
 
 | Column Name | Data Type | Constraints           |
-|-------------|------------|-----------------------|
-| id          | INTEGER    | Primary Key           |
-| user_id     | INTEGER    | Foreign Key, Not Null |
-| board_id    | INTEGER    | Foreign Key, Not Null |
-| type        | STRING     | Not Null              |
-| status      | STRING     | Not Null              |
-| created_at  | DATE       | Not Null              |
-| updated_at  | DATE       | Not Null              |
+| ----------- | --------- | --------------------- |
+| id          | INTEGER   | Primary Key           |
+| user_id     | INTEGER   | Foreign Key, Not Null |
+| board_id    | INTEGER   | Foreign Key, Not Null |
+| type        | STRING    | Not Null              |
+| status      | STRING    | Not Null              |
+| created_at  | DATE      | Not Null              |
+| updated_at  | DATE      | Not Null              |
 
 ### MeterReadings
 
-| Column Name      | Data Type | Constraints           |
-|------------------|------------|-----------------------|
-| id               | INTEGER    | Primary Key           |
-| meter_id         | INTEGER    | Foreign Key, Not Null |
-| field_worker_id  | INTEGER    | Foreign Key, Not Null |
-| units_consumed   | DECIMAL    | Not Null              |
-| reading_date     | DATE       | Not Null              |
-| photos           | JSON       | Not Null              |
-| revisit          | BOOLEAN    | Not Null              |
-| created_at       | DATE       | Not Null              |
-| updated_at       | DATE       | Not Null              |
+| Column Name     | Data Type | Constraints           |
+| --------------- | --------- | --------------------- |
+| id              | INTEGER   | Primary Key           |
+| meter_id        | INTEGER   | Foreign Key, Not Null |
+| field_worker_id | INTEGER   | Foreign Key, Not Null |
+| units_consumed  | DECIMAL   | Not Null              |
+| reading_date    | DATE      | Not Null              |
+| photos          | JSON      | Not Null              |
+| revisit         | BOOLEAN   | Not Null              |
+| created_at      | DATE      | Not Null              |
+| updated_at      | DATE      | Not Null              |
 
 ### Bills
 
-| Column Name     | Data Type | Constraints           |
-|-----------------|------------|-----------------------|
-| id              | INTEGER    | Primary Key           |
-| meter_id        | INTEGER    | Foreign Key, Not Null |
-| amount          | DECIMAL    | Not Null              |
-| units_consumed  | DECIMAL    | Not Null              |
-| base_rate       | DECIMAL    | Not Null              |
-| discount        | DECIMAL    | Not Null              |
-| total_amount    | DECIMAL    | Not Null              |
-| generated_at    | DATE       | Not Null              |
-| due_date        | DATE       | Not Null              |
-| status          | STRING     | Not Null              |
-| created_at      | DATE       | Not Null              |
-| updated_at      | DATE       | Not Null              |
+| Column Name    | Data Type | Constraints           |
+| -------------- | --------- | --------------------- |
+| id             | INTEGER   | Primary Key           |
+| meter_id       | INTEGER   | Foreign Key, Not Null |
+| amount         | DECIMAL   | Not Null              |
+| units_consumed | DECIMAL   | Not Null              |
+| base_rate      | DECIMAL   | Not Null              |
+| discount       | DECIMAL   | Not Null              |
+| total_amount   | DECIMAL   | Not Null              |
+| generated_at   | DATE      | Not Null              |
+| due_date       | DATE      | Not Null              |
+| status         | STRING    | Not Null              |
+| created_at     | DATE      | Not Null              |
+| updated_at     | DATE      | Not Null              |
 
 ### Tickets
 
-| Column Name  | Data Type | Constraints           |
-|--------------|------------|-----------------------|
-| id           | INTEGER    | Primary Key           |
-| user_id      | INTEGER    | Foreign Key, Not Null |
-| meter_id     | INTEGER    | Foreign Key, Not Null |
-| description  | TEXT       | Not Null              |
-| status       | STRING     | Not Null              |
-| created_at   | DATE       | Not Null              |
-| updated_at   | DATE       | Not Null              |
+| Column Name | Data Type | Constraints           |
+| ----------- | --------- | --------------------- |
+| id          | INTEGER   | Primary Key           |
+| user_id     | INTEGER   | Foreign Key, Not Null |
+| meter_id    | INTEGER   | Foreign Key, Not Null |
+| description | TEXT      | Not Null              |
+| status      | STRING    | Not Null              |
+| created_at  | DATE      | Not Null              |
+| updated_at  | DATE      | Not Null              |
 
 ### Associations in Sequelize
 
 ```js
 // User Model
-User.belongsTo(Role, { foreignKey: 'role_id' });
-User.belongsTo(Board, { foreignKey: 'board_id', allowNull: true });
-User.hasMany(Meter, { foreignKey: 'user_id' });
-User.hasMany(MeterReading, { foreignKey: 'field_worker_id' });
-User.hasMany(Ticket, { foreignKey: 'user_id' });
+User.belongsTo(Role, { foreignKey: "role_id" });
+User.belongsTo(Board, { foreignKey: "board_id", allowNull: true });
+User.hasMany(Meter, { foreignKey: "user_id" });
+User.hasMany(MeterReading, { foreignKey: "field_worker_id" });
+User.hasMany(Ticket, { foreignKey: "user_id" });
 
 // Role Model
-Role.hasMany(User, { foreignKey: 'role_id' });
+Role.hasMany(User, { foreignKey: "role_id" });
 
 // Board Model
-Board.hasMany(User, { foreignKey: 'board_id' });
-Board.hasMany(Meter, { foreignKey: 'board_id' });
+Board.hasMany(User, { foreignKey: "board_id" });
+Board.hasMany(Meter, { foreignKey: "board_id" });
 
 // Meter Model
-Meter.belongsTo(User, { foreignKey: 'user_id' });
-Meter.belongsTo(Board, { foreignKey: 'board_id' });
-Meter.hasMany(MeterReading, { foreignKey: 'meter_id' });
-Meter.hasMany(Bill, { foreignKey: 'meter_id' });
+Meter.belongsTo(User, { foreignKey: "user_id" });
+Meter.belongsTo(Board, { foreignKey: "board_id" });
+Meter.hasMany(MeterReading, { foreignKey: "meter_id" });
+Meter.hasMany(Bill, { foreignKey: "meter_id" });
 
 // MeterReading Model
-MeterReading.belongsTo(Meter, { foreignKey: 'meter_id' });
-MeterReading.belongsTo(User, { foreignKey: 'field_worker_id' });
+MeterReading.belongsTo(Meter, { foreignKey: "meter_id" });
+MeterReading.belongsTo(User, { foreignKey: "field_worker_id" });
 
 // Bill Model
-Bill.belongsTo(Meter, { foreignKey: 'meter_id' });
+Bill.belongsTo(Meter, { foreignKey: "meter_id" });
 
 // Ticket Model
-Ticket.belongsTo(User, { foreignKey: 'user_id' });
-Ticket.belongsTo(Meter, { foreignKey: 'meter_id' });
+Ticket.belongsTo(User, { foreignKey: "user_id" });
+Ticket.belongsTo(Meter, { foreignKey: "meter_id" });
 ```
-
 
 ### Updated API Endpoints (High-Level)
 
