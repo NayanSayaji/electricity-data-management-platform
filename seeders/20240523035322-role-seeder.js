@@ -8,37 +8,37 @@ module.exports = {
       [
         {
           id: uuidv4(),
-          roleName: "superadmin",
+          role: "superadmin",
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           id: uuidv4(),
-          roleName: "field_worker",
+          role: "field_worker",
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           id: uuidv4(),
-          roleName: "supervisor",
+          role: "supervisor",
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           id: uuidv4(),
-          roleName: "board_admin",
+          role: "board_admin",
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           id: uuidv4(),
-          roleName: "board_member",
+          role: "board_member",
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           id: uuidv4(),
-          roleName: "consumer",
+          role: "consumer",
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -51,7 +51,7 @@ module.exports = {
     await queryInterface.bulkDelete(
       "Roles",
       {
-        roleName: [
+        role: [
           "superadmin",
           "field_worker",
           "supervisor",

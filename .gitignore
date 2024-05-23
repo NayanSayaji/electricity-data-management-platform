@@ -1,3 +1,31 @@
 node_modules
 .env
 build
+
+mkdir boards 
+cd boards
+touch boards.repo.ts  boards.repsonse.ts  boards.routes.ts  boards.schema.ts  boards.services.ts  boards.types.ts  boards.validations.ts
+cd ..
+
+mkdir meters
+cd meters
+touch meters.repo.ts  meters.repsonse.ts  meters.routes.ts  meters.schema.ts  meters.services.ts  meters.types.ts  meters.validations.ts
+cd ..
+
+mkdir readings
+cd readings
+touch meter.readings.repo.ts  meter.readings.repsonse.ts  meter.readings.routes.ts  meter.readings.schema.ts  meter.readings.services.ts  meter.readings.types.ts  meter.readings.validations.ts
+cd ..
+
+mkdir bills
+cd readings
+touch bills.repo.ts  bills.repsonse.ts  bills.routes.ts  bills.schema.ts  bills.services.ts  bills.types.ts  bills.validations.ts
+cd ..
+
+mkdir tickets
+cd readings
+touch tickets.repo.ts  tickets.repsonse.ts  tickets.routes.ts  tickets.schema.ts  tickets.services.ts  tickets.types.ts  tickets.validations.ts
+cd ..
+
+touch prices.repo.ts  prices.repsonse.ts  prices.routes.ts  prices.schema.ts  prices.services.ts  prices.types.ts  prices.validations.ts
+cd ..

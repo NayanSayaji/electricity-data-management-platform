@@ -64,7 +64,7 @@ Total Amount = Amount - (Amount * Discount)
 
 ### Tables
 
-### Users
+#### Users
 
 | Column Name | Data Type | Constraints           |
 | ----------- | --------- | --------------------- |
@@ -77,7 +77,7 @@ Total Amount = Amount - (Amount * Discount)
 | created_at  | DATE      | Not Null              |
 | updated_at  | DATE      | Not Null              |
 
-### Roles
+#### Roles
 
 | Column Name | Data Type | Constraints |
 | ----------- | --------- | ----------- |
@@ -86,17 +86,16 @@ Total Amount = Amount - (Amount * Discount)
 | created_at  | DATE      | Not Null    |
 | updated_at  | DATE      | Not Null    |
 
-### Boards
+#### Boards
 
 | Column Name | Data Type | Constraints |
 | ----------- | --------- | ----------- |
 | id          | INTEGER   | Primary Key |
 | name        | STRING    | Not Null    |
-| base_rate   | DECIMAL   | Not Null    |
 | created_at  | DATE      | Not Null    |
 | updated_at  | DATE      | Not Null    |
 
-### Meters
+#### Meters
 
 | Column Name | Data Type | Constraints           |
 | ----------- | --------- | --------------------- |
@@ -108,7 +107,7 @@ Total Amount = Amount - (Amount * Discount)
 | created_at  | DATE      | Not Null              |
 | updated_at  | DATE      | Not Null              |
 
-### MeterReadings
+#### MeterReadings
 
 | Column Name     | Data Type | Constraints           |
 | --------------- | --------- | --------------------- |
@@ -122,7 +121,7 @@ Total Amount = Amount - (Amount * Discount)
 | created_at      | DATE      | Not Null              |
 | updated_at      | DATE      | Not Null              |
 
-### Bills
+#### Bills
 
 | Column Name    | Data Type | Constraints           |
 | -------------- | --------- | --------------------- |
@@ -139,7 +138,7 @@ Total Amount = Amount - (Amount * Discount)
 | created_at     | DATE      | Not Null              |
 | updated_at     | DATE      | Not Null              |
 
-### Tickets
+#### Tickets
 
 | Column Name | Data Type | Constraints           |
 | ----------- | --------- | --------------------- |
@@ -151,40 +150,30 @@ Total Amount = Amount - (Amount * Discount)
 | created_at  | DATE      | Not Null              |
 | updated_at  | DATE      | Not Null              |
 
-### Associations in Sequelize
+#### MeterPrices
 
-```js
-// User Model
-User.belongsTo(Role, { foreignKey: "role_id" });
-User.belongsTo(Board, { foreignKey: "board_id", allowNull: true });
-User.hasMany(Meter, { foreignKey: "user_id" });
-User.hasMany(MeterReading, { foreignKey: "field_worker_id" });
-User.hasMany(Ticket, { foreignKey: "user_id" });
+| Column Name | Data Type | Constraints |
+| ----------- | --------- | ----------- |
+| id          | INTEGER   | Primary Key |
+| board_id    | INTEGER   | Foreign Key |
+| type        | STRING    | Not Null    |
+| base_rate   | DECIMAL   | Not Null    |
+| discount    | DECIMAL   | Not Null    |
+| created_at  | DATE      | Not Null    |
+| updated_at  | DATE      | Not Null    |
 
-// Role Model
-Role.hasMany(User, { foreignKey: "role_id" });
+### Associations
 
-// Board Model
-Board.hasMany(User, { foreignKey: "board_id" });
-Board.hasMany(Meter, { foreignKey: "board_id" });
-
-// Meter Model
-Meter.belongsTo(User, { foreignKey: "user_id" });
-Meter.belongsTo(Board, { foreignKey: "board_id" });
-Meter.hasMany(MeterReading, { foreignKey: "meter_id" });
-Meter.hasMany(Bill, { foreignKey: "meter_id" });
-
-// MeterReading Model
-MeterReading.belongsTo(Meter, { foreignKey: "meter_id" });
-MeterReading.belongsTo(User, { foreignKey: "field_worker_id" });
-
-// Bill Model
-Bill.belongsTo(Meter, { foreignKey: "meter_id" });
-
-// Ticket Model
-Ticket.belongsTo(User, { foreignKey: "user_id" });
-Ticket.belongsTo(Meter, { foreignKey: "meter_id" });
-```
+| **Table**     | **Association**                                                          |
+| ------------- | ------------------------------------------------------------------------ |
+| Users         | - Belongs to Roles (role_id) <br> - Belongs to Boards (board_id)         |
+| Roles         | - Has many Users                                                         |
+| Boards        | - Has many Users <br> - Has many Meters <br> - Has many MeterPrices      |
+| Meters        | - Belongs to Users (user_id) <br> - Belongs to Boards (board_id)         |
+| MeterReadings | - Belongs to Meters (meter_id) <br> - Belongs to Users (field_worker_id) |
+| Bills         | - Belongs to Meters (meter_id)                                           |
+| Tickets       | - Belongs to Users (user_id) <br> - Belongs to Meters (meter_id)         |
+| MeterPrices   | - Belongs to Boards (board_id)                                           |
 
 ### Updated API Endpoints (High-Level)
 
@@ -194,10 +183,12 @@ Ticket.belongsTo(Meter, { foreignKey: "meter_id" });
   - `POST api/v1/login`
 
 - **User**:
+
   - `GET api/v1/users/:id`
   - `GET api/v1/users/:id/bills`
   - `GET api/v1/users/:id/tickets`
   - `POST api/v1/users/:id/tickets`
+
 - **Admin**:
 
   - `GET api/v1/admin/users`
@@ -206,7 +197,7 @@ Ticket.belongsTo(Meter, { foreignKey: "meter_id" });
   - `PUT api/v1/admin/boards/:id`
   - `DELETE api/v1/admin/boards/:id`
   - `GET api/v1/admin/roles`
-  - `POST api/v1/admin/roles`
+  - `POST api/v1/admin/users`
   - `PUT api/v1/admin/roles/:id`
   - `DELETE api/v1/admin/roles/:id`
 
