@@ -41,7 +41,7 @@ Total Amount = Amount - (Amount * Discount)
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/
+   git clone https://github.com/NayanSayaji/electricity-data-management-platform.git
    ```
 2. Install dependencies:
    ```bash
