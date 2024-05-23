@@ -1,9 +1,9 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../connections/sequelize.global.instance';
-import User from '../users/user.schema';
+import Board from '../boards/boards.schema';
 
-export const Role = sequelize.define(
-    'Role',
+export const MeterPrice = sequelize.define(
+    'MeterPrice',
     {
         id: {
             type: DataTypes.INTEGER,
@@ -11,8 +11,21 @@ export const Role = sequelize.define(
             autoIncrement: true,
             allowNull: false,
         },
-        role: {
+        board_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        type: {
             type: DataTypes.STRING,
+            allowNull: false,
+            unique: 'compositeIndex',
+        },
+        base_rate: {
+            type: DataTypes.DECIMAL,
+            allowNull: false,
+        },
+        discount: {
+            type: DataTypes.DECIMAL,
             allowNull: false,
         },
         created_at: {
@@ -30,4 +43,6 @@ export const Role = sequelize.define(
     }
 );
 
-export default Role;
+export default MeterPrice;
+
+MeterPrice.belongsTo(Board, { foreignKey: 'board_id' });

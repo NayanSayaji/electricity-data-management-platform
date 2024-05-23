@@ -7,7 +7,7 @@ import { permit } from "../utils/authorizations";
 
 const router = Router();
 
-router.get("/user/:name", permit(['customer']), ...LoginValidations, async (req, res, next) => {
+router.get("/user/:name", permit(['consumer']), ...LoginValidations, async (req, res, next) => {
     try {
         const result = await authServices.find({username:req.params.name})
         res.send(new ResponseHandler(result));

@@ -1,6 +1,8 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../connections/sequelize.global.instance';
-import { v4 as uuidv4 } from "uuid"
+import { v4 as uuidv4 } from "uuid";
+import Board from '../boards/boards.schema';
+import Role from '../roles/roles.schema';
 
 export const User = sequelize.define(
     'User',
@@ -11,25 +13,41 @@ export const User = sequelize.define(
             primaryKey: true,
             allowNull: false,
         },
-        name: {
+        username: {
             type: DataTypes.STRING(20),
             allowNull: false,
         },
-        username: {
-            type: DataTypes.STRING,
+        firstname: {
+            type: DataTypes.STRING(20),
+            allowNull: false,
+        },
+        lastname: {
+            type: DataTypes.STRING(20),
             allowNull: false,
         },
         email: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: true,
         },
         password: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        role: {
-            type: DataTypes.STRING,
-            defaultValue: 'customer',
+        role_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        board_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        created_at: {
+            type: DataTypes.DATE,
+            allowNull: false,
+        },
+        updated_at: {
+            type: DataTypes.DATE,
             allowNull: false,
         },
     },
@@ -37,8 +55,9 @@ export const User = sequelize.define(
         timestamps: true,
         paranoid: true
     }
-)
-
+);
 
 export default User;
 
+User.belongsTo(Role, { foreignKey: 'role_id' });
+User.belongsTo(Board, { foreignKey: 'board_id' });

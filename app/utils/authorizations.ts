@@ -29,7 +29,7 @@ export const validateToken = (excludedRoutes: ExcludedRoutes) =>
 
 
 
-type Role = 'customer' | 'owner' | 'admin';
+type Role = 'superadmin' | 'consumer' | 'board_member' | 'board_admin' | 'supervisor' | 'field_worker' ;
 type Roles = Role[]
 
 export const permit = (roles: Roles) =>

@@ -1,9 +1,10 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../connections/sequelize.global.instance';
 import User from '../users/user.schema';
+import Board from '../boards/boards.schema';
 
-export const Role = sequelize.define(
-    'Role',
+export const Meter = sequelize.define(
+    'Meter',
     {
         id: {
             type: DataTypes.INTEGER,
@@ -11,7 +12,19 @@ export const Role = sequelize.define(
             autoIncrement: true,
             allowNull: false,
         },
-        role: {
+        user_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        board_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        type: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        status: {
             type: DataTypes.STRING,
             allowNull: false,
         },
@@ -30,4 +43,7 @@ export const Role = sequelize.define(
     }
 );
 
-export default Role;
+export default Meter;
+
+Meter.belongsTo(User, { foreignKey: 'user_id' });
+Meter.belongsTo(Board, { foreignKey: 'board_id' });
