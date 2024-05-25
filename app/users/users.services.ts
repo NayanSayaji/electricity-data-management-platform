@@ -1,7 +1,7 @@
 import Role from "../roles/roles.schema";
-import userRepo from "./user.repo";
-import { userResponses } from "./user.repsonse";
-import { IUser } from "./user.types";
+import userRepo from "./users.repo";
+import { userResponses } from "./users.repsonse";
+import { IUser } from "./users.types";
 
 const find = async (query: Partial<IUser>) => {
     try {

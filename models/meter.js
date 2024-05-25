@@ -1,26 +1,12 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class meters extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-  }
-  meters.init({
-    user_id: DataTypes.STRING,
-    board_id: DataTypes.STRING,
-    type: DataTypes.STRING,
-    status: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'meters',
-  });
-  return meters;
+  const Meter = sequelize.define('Meter', {
+    type: DataTypes.ENUM('household_solar', 'household_regular', 'industrial_solar', 'industrial_regular')
+  }, {});
+  Meter.associate = function(models) {
+    Meter.belongsTo(models.User, { foreignKey: 'userId' });
+    Meter.belongsTo(models.Board, { foreignKey: 'boardId' });
+    Meter.hasMany(models.MeterReading, { foreignKey: 'meterId' });
+  };
+  return Meter;
 };

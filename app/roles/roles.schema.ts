@@ -1,33 +1,37 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../connections/sequelize.global.instance';
-import User from '../users/user.schema';
 
-export const Role = sequelize.define(
-    'Role',
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-            allowNull: false,
-        },
-        role: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        created_at: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
-        updated_at: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
+const Role = sequelize.define(
+  'Role',
+  {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      allowNull: false,
     },
-    {
-        timestamps: true,
-        paranoid: true,
-    }
+    name: {
+      type: DataTypes.ENUM(
+        'superadmin',
+        'supervisor',
+        'field_worker',
+        'board_admin',
+        'board_member',
+        'user'
+      ),
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+  },
+  {
+    timestamps: true,
+  }
 );
 
 export default Role;

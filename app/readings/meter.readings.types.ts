@@ -1,13 +1,16 @@
+import { Optional } from 'sequelize';
 import z from 'zod';
 
 export const MeterReadingSchema = z.object({
-  id: z.string(),
-  meter_id: z.string(),
-  field_worker_id: z.string(),
+  id: z.string().uuid(),
+  meterId: z.string(),
+  fieldWorkerId: z.string(),
   units_consumed: z.number(),
-  reading_date: z.date(),
   photos: z.array(z.string()),
-  revisit: z.boolean()
+  timestamp: z.date(),
+  status: z.enum(['submitted', 'pending_revisit']),
+  remarks: z.string(),
 });
 
-export interface IMeterReading extends z.infer<typeof MeterReadingSchema>{};
+export interface IMeterReading extends z.infer<typeof MeterReadingSchema> {};
+export interface IMeterReadingCreationValidatorSchema extends Pick<IMeterReading, 'meterId'| 'units_consumed' | 'photos' | 'status' | 'fieldWorkerId' > {}

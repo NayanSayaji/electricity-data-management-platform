@@ -1,28 +1,16 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class meterreadings extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-  }
-  meterreadings.init({
-    meter_id: DataTypes.STRING,
-    field_worker_id: DataTypes.STRING,
-    units_consumed: DataTypes.DECIMAL,
-    reading_date: DataTypes.DATE,
+  const MeterReading = sequelize.define('MeterReading', {
+    units_consumed: DataTypes.FLOAT,
     photos: DataTypes.JSON,
-    revisit: DataTypes.BOOLEAN
-  }, {
-    sequelize,
-    modelName: 'meterreadings',
-  });
-  return meterreadings;
+    timestamp: DataTypes.DATE,
+    status: DataTypes.ENUM('submitted', 'pending_revisit'),
+    remarks: DataTypes.TEXT
+  }, {});
+  MeterReading.associate = function(models) {
+    MeterReading.belongsTo(models.Meter, { foreignKey: 'meterId' });
+    MeterReading.belongsTo(models.User, { foreignKey: 'fieldWorkerId' });
+    MeterReading.hasOne(models.Bill, { foreignKey: 'meterReadingId' });
+  };
+  return MeterReading;
 };

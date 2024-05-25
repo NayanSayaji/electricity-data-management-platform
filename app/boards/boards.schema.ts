@@ -1,47 +1,69 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../connections/sequelize.global.instance';
+import { v4 as uuidv4 } from 'uuid';
+import User from '../users/users.schema';
 import Meter from '../meters/meters.schema';
-import MeterPrice from '../metertype/prices.schema';
-import User from '../users/user.schema';
+import Ticket from '../tickets/tickets.schema';
 
 export const Board = sequelize.define(
-    'Board',
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-            allowNull: false,
-        },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        base_rate: {
-            type: DataTypes.DECIMAL,
-            allowNull: false,
-        },
-        discount: {
-            type: DataTypes.DECIMAL,
-            allowNull: false,
-        },
-        created_at: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
-        updated_at: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
+  'Board',
+  {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: uuidv4,
+      primaryKey: true,
+      allowNull: false,
     },
-    {
-        timestamps: true,
-        paranoid: true,
-    }
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    base_rate_household_regular: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    base_rate_household_solar: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    base_rate_industrial_regular: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    base_rate_industrial_solar: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    discount_household_solar: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    discount_industrial_solar: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+  },
+  {
+    timestamps: true,
+    paranoid: true,
+  }
 );
 
 export default Board;
 
-Board.hasMany(User, { foreignKey: 'board_id' });
-Board.hasMany(Meter, { foreignKey: 'board_id' });
-Board.hasMany(MeterPrice, { foreignKey: 'board_id' });
+// Associations
+Board.hasMany(User, { foreignKey: 'boardId' });
+Board.hasMany(Meter, { foreignKey: 'boardId' });
+Board.hasMany(Ticket, { foreignKey: 'boardId' });

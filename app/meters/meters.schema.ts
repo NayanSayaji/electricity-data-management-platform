@@ -1,49 +1,43 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../connections/sequelize.global.instance';
-import User from '../users/user.schema';
+import User from '../users/users.schema';
 import Board from '../boards/boards.schema';
+import MeterReading from '../readings/meter.readings.schema';
 
-export const Meter = sequelize.define(
-    'Meter',
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-            allowNull: false,
-        },
-        user_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        board_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        type: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        status: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        created_at: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
-        updated_at: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
+const Meter = sequelize.define(
+  'Meter',
+  {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      allowNull: false,
     },
-    {
-        timestamps: true,
-        paranoid: true,
-    }
+    type: {
+      type: DataTypes.ENUM('household_solar', 'household_regular', 'industrial_solar', 'industrial_regular'),
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+  },
+  {
+    timestamps: true,
+    paranoid: true,
+  }
 );
 
 export default Meter;
 
-Meter.belongsTo(User, { foreignKey: 'user_id' });
-Meter.belongsTo(Board, { foreignKey: 'board_id' });
+// Associations
+Meter.belongsTo(User, { foreignKey: 'userId' });
+Meter.belongsTo(Board, { foreignKey: 'boardId' });
+Meter.hasMany(MeterReading, { foreignKey: 'meterId' });

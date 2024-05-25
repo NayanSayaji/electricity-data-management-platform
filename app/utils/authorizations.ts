@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 import { ExcludedRoutes } from "../routes/routes.types";
 import { authReponses } from "../auth/auth.responses";
-import userServices from "../users/user.services";
+import userServices from "../users/users.services";
 
 export const validateToken = (excludedRoutes: ExcludedRoutes) =>
     (req: Request, res: Response, next: NextFunction) => {

@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response, Router } from "express";
-
 import { Route } from "../routes/routes.types";
-import userServices from "./user.services";
+import userServices from "./users.services";
 import { ResponseHandler } from "../utils/response.handler";
-import { roleValidator } from "./user.validations";
+import { roleValidator } from "./users.validations";
 import { permit } from "../utils/authorizations";
 
 const router = Router();
@@ -13,7 +12,7 @@ router.get('/:id', permit([]), async (req: Request<any, any, any, any>, res: Res
     try {
         const role_id: string = req.query.role_id || 'customer';
         const query = { role_id: role_id }
-        const result = userServices.find(query)
+        const result = "userServices";
         res.send(new ResponseHandler(result))
     } catch (e) {
         next(e)
@@ -25,7 +24,7 @@ router.put('/:id', permit([]), async (req: Request<any, any, any, any>, res: Res
     try {
         const role_id: string = req.query.role_id || 'customer';
         const query = { role_id: role_id }
-        const result = userServices.find(query)
+        const result = "userServices.find (query)"
         res.send(new ResponseHandler(result))
     } catch (e) {
         next(e)
@@ -37,7 +36,7 @@ router.get('/', permit([]), async (req: Request<any, any, any, any>, res: Respon
     try {
         const role_id: string = req.query.role_id || 'customer';
         const query = { role_id: role_id }
-        const result = userServices.find(query)
+        const result = "userServices.find(query)"
         res.send(new ResponseHandler(result))
     } catch (e) {
         next(e)
@@ -49,7 +48,7 @@ router.post('/', permit(['superadmin','board_admin','board_member']), async (req
     try {
         const role_id: string = req.payload.role || 'customer';
         const query = { role_id: role_id }
-        const result = userServices.find(query)
+        const result = "userServices.find(query)"
         res.send(new ResponseHandler(result))
     } catch (e) {
         next(e)

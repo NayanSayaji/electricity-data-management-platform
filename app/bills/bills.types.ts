@@ -1,16 +1,15 @@
+import { Optional } from 'sequelize';
 import z from 'zod';
 
 export const BillSchema = z.object({
   id: z.string().uuid(),
-  meter_id: z.string().uuid(),
+  meterReadingId: z.string(),
   amount: z.number(),
-  units_consumed: z.number(),
-  base_rate: z.number(),
-  discount: z.number(),
+  discount: z.number().optional(),
   total_amount: z.number(),
   generated_at: z.date(),
-  due_date: z.date(),
-  status: z.string()
+  email_sent: z.boolean()
 });
 
 export interface IBill extends z.infer<typeof BillSchema> {};
+export interface IBillCreationValidatorSchema extends Optional<IBill, 'id' | 'discount' > {}

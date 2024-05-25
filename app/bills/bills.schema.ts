@@ -1,67 +1,57 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../connections/sequelize.global.instance';
-import Meter from '../meters/meters.schema';
+import MeterReading from '../readings/meter.readings.schema';
+import Ticket from '../tickets/tickets.schema';
 
-export const Bill = sequelize.define(
-    'Bill',
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-            allowNull: false,
-        },
-        meter_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        amount: {
-            type: DataTypes.DECIMAL,
-            allowNull: false,
-        },
-        units_consumed: {
-            type: DataTypes.DECIMAL,
-            allowNull: false,
-        },
-        base_rate: {
-            type: DataTypes.DECIMAL,
-            allowNull: false,
-        },
-        discount: {
-            type: DataTypes.DECIMAL,
-            allowNull: false,
-        },
-        total_amount: {
-            type: DataTypes.DECIMAL,
-            allowNull: false,
-        },
-        generated_at: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
-        due_date: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
-        status: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        created_at: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
-        updated_at: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
+const Bill = sequelize.define(
+  'Bill',
+  {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      allowNull: false,
     },
-    {
-        timestamps: true,
-        paranoid: true,
-    }
+    amount: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    discount: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    total_amount: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    generated_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    email_sent: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+  },
+  {
+    timestamps: true,
+    paranoid: true,
+  }
 );
 
 export default Bill;
 
-Bill.belongsTo(Meter, { foreignKey: 'meter_id' });
+// Associations
+Bill.belongsTo(MeterReading, { foreignKey: 'meterReadingId' });
+Bill.hasMany(Ticket, { foreignKey: 'billId' });

@@ -1,23 +1,18 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class boards extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-  }
-  boards.init({
-    name: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'boards',
-  });
-  return boards;
+  const Board = sequelize.define('Board', {
+    name: DataTypes.STRING,
+    base_rate_household_regular: DataTypes.FLOAT,
+    base_rate_household_solar: DataTypes.FLOAT,
+    base_rate_industrial_regular: DataTypes.FLOAT,
+    base_rate_industrial_solar: DataTypes.FLOAT,
+    discount_household_solar: DataTypes.FLOAT,
+    discount_industrial_solar: DataTypes.FLOAT
+  }, {});
+  Board.associate = function(models) {
+    Board.hasMany(models.User, { foreignKey: 'boardId' });
+    Board.hasMany(models.Meter, { foreignKey: 'boardId' });
+    Board.hasMany(models.Ticket, { foreignKey: 'boardId' }); // Board has many Tickets
+  };
+  return Board;
 };

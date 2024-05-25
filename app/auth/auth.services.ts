@@ -1,6 +1,6 @@
 import { compare } from "bcrypt";
-import userService from "../users/user.services";
-import { IUser, IUserRegistrationValidatorSchema } from "../users/user.types";
+import userService from "../users/users.services";
+import { IUser, IUserRegistrationValidatorSchema } from "../users/users.types";
 import { encrypt } from "../utils/encrypt";
 import { authReponses } from "./auth.responses";
 import { sign } from "jsonwebtoken";

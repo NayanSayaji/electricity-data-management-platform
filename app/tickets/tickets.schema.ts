@@ -1,49 +1,48 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../connections/sequelize.global.instance';
-import Meter from '../meters/meters.schema';
-import User from '../users/user.schema';
+import User from '../users/users.schema';
+import Bill from '../bills/bills.schema';
+import Board from '../boards/boards.schema';
 
-export const Ticket = sequelize.define(
-    'Ticket',
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-            allowNull: false,
-        },
-        user_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        meter_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        description: {
-            type: DataTypes.TEXT,
-            allowNull: false,
-        },
-        status: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        created_at: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
-        updated_at: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
+const Ticket = sequelize.define(
+  'Ticket',
+  {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      allowNull: false,
     },
-    {
-        timestamps: true,
-        paranoid: true,
-    }
+    issue_description: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    status: {
+      type: DataTypes.ENUM('raised','open', 'closed'),
+      defaultValue:'raised',
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+  },
+  {
+    timestamps: true,
+    paranoid: true,
+  }
 );
 
 export default Ticket;
 
-Ticket.belongsTo(User, { foreignKey: 'user_id' });
-Ticket.belongsTo(Meter, { foreignKey: 'meter_id' });
+// Associations
+Ticket.belongsTo(User, { foreignKey: 'userId' });
+Ticket.belongsTo(Bill, { foreignKey: 'billId' });
+Ticket.belongsTo(Board, { foreignKey: 'boardId' });
