@@ -1,23 +1,23 @@
 import Role from "../roles/roles.schema";
 import userRepo from "./users.repo";
 import { userResponses } from "./users.repsonse";
-import { IUser } from "./users.types";
+import { IUser, IUserRegistrationValidatorSchema } from "./users.types";
 
-const find = async (query: Partial<IUser>) => {
+const findAllUsers = async (query: Partial<IUser>) => {
     try {
         const queryObj = { where: query }
-        const users = await userRepo.find(queryObj);
+        const users = await userRepo.findAllUsers(queryObj);
         return users;
     } catch (e) {
         throw e;
     }
 }
 
-const findOne = async (query: Partial<IUser>, safe?: boolean) => {
+const findUser = async (query: Partial<IUser>, safe?: boolean) => {
     try {
-        const queryObj = { where: query }
-        const user = await userRepo.findOne(queryObj);
-        console.log(user?.dataValues)
+        const queryObj = { where: query, include: [Role] }
+        const user = await userRepo.findUser(queryObj);
+        console.log(user)
         if (!user) {
             if (safe) return null;
 
@@ -29,26 +29,27 @@ const findOne = async (query: Partial<IUser>, safe?: boolean) => {
     }
 }
 
-
-const findOneWithRole = async (userId: string) => {
+const findUserByPk = async (id: string) => {
     try {
-        const user = await userRepo.findOne({
-            where: { id: userId },
-            include: [Role],
-        });
+        const user = await userRepo.findUserByPk(id);
+        console.log("user -> \n", user)
         if (!user) {
             throw userResponses.USER_NOT_FOUND;
         }
-        console.log(user.dataValues)
-        return user.dataValues;
+        return user;
     } catch (e) {
         throw e;
     }
-};
+}
 
-const insertOne = async (user: IUser) => {
+const insertUser = async (user: IUser) => {
     try {
-        const response = await userRepo.insertOne(user);
+        const query = {
+            where: { email: user.email },
+            defaults: user
+        }
+
+        const response = await userRepo.insertUser(query);
         if (response) return userResponses.USER_REGISTERED_SUCCESSFULLY;
         throw userResponses.USER_REGISTRATION_FAILED;
     } catch (e) {
@@ -56,6 +57,59 @@ const insertOne = async (user: IUser) => {
     }
 }
 
+const updateUser = async (user: Partial<IUser>, body: Partial<IUser>) => {
+    try {
+        const query = {
+            where: { body }
+        }
+        const response = await userRepo.updateUser(user, query);
+        if (response) return userResponses.USER_REGISTERED_SUCCESSFULLY;
+        throw userResponses.USER_REGISTRATION_FAILED;
+    } catch (e) {
+        throw e;
+    }
+}
+
+const updateUserById = async (id: Pick<IUser, "id">, body: Partial<IUser>) => {
+    try {
+        const query = {
+            where: { body }
+        }
+        const response = await userRepo.updateUser(body, query);
+        if (response) return userResponses.USER_REGISTERED_SUCCESSFULLY;
+        throw userResponses.USER_REGISTRATION_FAILED;
+    } catch (e) {
+        throw e;
+    }
+}
+
+const deleteUser = async (user: Pick<IUser, "id">) => {
+    try {
+        const response = await userRepo.deleteUser(user);
+        if (response) return userResponses.USER_REGISTERED_SUCCESSFULLY;
+        throw userResponses.USER_REGISTRATION_FAILED;
+    } catch (e) {
+        throw e;
+    }
+}
+
+const bulkInsertUsers = async (users: IUserRegistrationValidatorSchema[]) => {
+    try {
+        const response = await userRepo.bulkInsertUsers(users);
+        if (response) return userResponses.BULK_USER_REGISTERED_SUCCESSFULLY;
+        throw userResponses.USER_REGISTRATION_FAILED;
+    } catch (e) {
+        throw e;
+    }
+}
+
 export default {
-    find, findOne, insertOne,findOneWithRole
+    findAllUsers,
+    findUser,
+    findUserByPk,
+    insertUser,
+    bulkInsertUsers,
+    updateUser,
+    updateUserById,
+    deleteUser
 }

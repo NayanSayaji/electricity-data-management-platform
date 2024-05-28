@@ -8,3 +8,7 @@ const findRoleById = (query: string) => {
         throw e
     }
 }
+
+export default {
+    findRoleById
+}

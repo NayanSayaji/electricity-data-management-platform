@@ -3,7 +3,6 @@ import z from 'zod';
 
 export const UserSchema = z.object({
   id: z.string().uuid(),
-  username: z.string(),
   firstname: z.string(),
   lastname: z.string(),
   email: z.string(),
@@ -13,6 +12,11 @@ export const UserSchema = z.object({
 });
 
 
-export interface IUser extends z.infer<typeof UserSchema> {};
+export interface IUser extends z.infer<typeof UserSchema> { };
+
+// export const bulkRegistrationSchema = UserSchema;
+
+// export interface IUserRegistrationValidatorSchema extends IUser { }
+
+export interface IUserLoginValidatorSchema extends Pick<IUser, 'email' | 'password'> { }
 export interface IUserRegistrationValidatorSchema extends Optional<IUser, 'id'> {}
-// export interface IUserRegistrationValidatorSchema extends Optional<IUser, 'id'> {}

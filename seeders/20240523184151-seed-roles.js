@@ -1,16 +1,48 @@
 "use strict";
 
+const { v4 } = require("uuid");
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(
       "Roles",
       [
-        {id:"aldsjfalskfjadskljf1",name: "superadmin", createdAt: new Date(), updatedAt: new Date() },
-        {id:"aldsjfalskfjadskljf2", name: "supervisor", createdAt: new Date(), updatedAt: new Date() },
-        {id:"aldsjfalskfjadskljf3", name: "field_worker", createdAt: new Date(), updatedAt: new Date() },
-        {id:"aldsjfalskfjadskljf4", name: "board_admin", createdAt: new Date(), updatedAt: new Date() },
-        {id:"aldsjfalskfjadskljf5", name: "board_member", createdAt: new Date(), updatedAt: new Date() },
-        {id:"aldsjfalskfjadskljf6", name: "user", createdAt: new Date(), updatedAt: new Date() },
+        {
+          id: v4(),
+          name: "SUPERADMIN",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: v4(),
+          name: "SUPERVISOR",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: v4(),
+          name: "FIELD_WORKER",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: v4(),
+          name: "BOARD_ADMIN",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: v4(),
+          name: "BOARD_MEMBER",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: v4(),
+          name: "CONSUMER",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

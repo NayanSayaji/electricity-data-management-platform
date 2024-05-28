@@ -1,7 +1,7 @@
-import { query } from "../utils/validation";
-// import { findAllUsersWithPerticularRole } from "./users.types";
+import { body, query } from "../utils/validation";
+import { UserSchema } from "./users.types";
 
-export const roleValidator = [
-    // query(findAllUsersWithPerticularRole),
+export const bulkRegistrationSchemaValidator = [
+    body(UserSchema, true),
 ]
 

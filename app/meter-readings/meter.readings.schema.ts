@@ -1,8 +1,8 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, UUID } from 'sequelize';
 import { sequelize } from '../connections/sequelize.global.instance';
-import Meter from '../meters/meters.schema';
+import Meter from '../meter/meter.schema';
 import User from '../users/users.schema';
-import Bill from '../bills/bills.schema';
+import Bill from '../bill/bill.schema';
 
 const MeterReading = sequelize.define(
   'MeterReading',
@@ -11,6 +11,26 @@ const MeterReading = sequelize.define(
       type: DataTypes.UUID,
       primaryKey: true,
       allowNull: false,
+    },
+    meterId: {
+      type: UUID,
+      allowNull:false,
+      references:{
+        model:Meter,
+        key:'id'
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL',
+    },
+    fieldWorkerId: {
+      type: UUID,
+      allowNull:false,
+      references:{
+        model:User,
+        key:'id'
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL',
     },
     units_consumed: {
       type: DataTypes.FLOAT,
@@ -25,12 +45,9 @@ const MeterReading = sequelize.define(
       allowNull: false,
     },
     status: {
-      type: DataTypes.ENUM('submitted', 'pending_revisit'),
+      type: DataTypes.ENUM('not_visited', 'pending_revisit', 'submitted'),
       allowNull: false,
-    },
-    remarks: {
-      type: DataTypes.TEXT,
-      allowNull: false,
+      defaultValue:'not_visited'
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -43,15 +60,7 @@ const MeterReading = sequelize.define(
     deletedAt: {
       type: DataTypes.DATE,
       allowNull: true,
-    },
-    meterId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    fieldWorkerId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+    }
   },
   {
     timestamps: true,
@@ -59,9 +68,12 @@ const MeterReading = sequelize.define(
   }
 );
 
-export default MeterReading;
 
 // Associations
-MeterReading.belongsTo(Meter, { foreignKey: 'meterId' });
 MeterReading.belongsTo(User, { foreignKey: 'fieldWorkerId' });
-MeterReading.hasOne(Bill, { foreignKey: 'meterReadingId' });
+User.hasMany(MeterReading, { foreignKey: 'fieldWorkerId' });
+
+MeterReading.belongsTo(Meter, { foreignKey: 'meterId' });
+Meter.hasMany(MeterReading, { foreignKey: 'meterId' });
+
+export default MeterReading;

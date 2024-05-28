@@ -2,7 +2,7 @@
 
 /** @type {import('sequelize-cli').Migration} */
 
-const { UUIDV4 } = require('sequelize');
+const { UUIDV4, TEXT } = require('sequelize');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -34,7 +34,7 @@ module.exports = {
         type: Sequelize.FLOAT
       },
       photos: {
-        type: Sequelize.JSON
+        type: Sequelize.ARRAY(TEXT)
       },
       timestamp: {
         type: Sequelize.DATE

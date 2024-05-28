@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../connections/sequelize.global.instance';
-import MeterReading from '../readings/meter.readings.schema';
+import MeterReading from '../meter-readings/meter.readings.schema';
 import Ticket from '../tickets/tickets.schema';
 
 const Bill = sequelize.define(
@@ -11,24 +11,18 @@ const Bill = sequelize.define(
       primaryKey: true,
       allowNull: false,
     },
-    amount: {
-      type: DataTypes.FLOAT,
+    meterReadingId: {
+      type: DataTypes.UUID,
       allowNull: false,
-    },
-    discount: {
-      type: DataTypes.FLOAT,
-      allowNull: true,
+      references: {
+        model: MeterReading,
+        key: 'id',
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL',
     },
     total_amount: {
       type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    generated_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    email_sent: {
-      type: DataTypes.BOOLEAN,
       allowNull: false,
     },
     createdAt: {
@@ -50,8 +44,10 @@ const Bill = sequelize.define(
   }
 );
 
-export default Bill;
 
 // Associations
 Bill.belongsTo(MeterReading, { foreignKey: 'meterReadingId' });
-Bill.hasMany(Ticket, { foreignKey: 'billId' });
+MeterReading.hasOne(Bill, { foreignKey: 'meterReadingId' });
+
+export default Bill;
+

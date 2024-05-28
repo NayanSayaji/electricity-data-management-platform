@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import { sequelize } from '../connections/sequelize.global.instance';
 import { v4 as uuidv4 } from 'uuid';
 import User from '../users/users.schema';
-import Meter from '../meters/meters.schema';
+import Meter from '../meter/meter.schema';
 import Ticket from '../tickets/tickets.schema';
 
 export const Board = sequelize.define(
@@ -42,6 +42,26 @@ export const Board = sequelize.define(
       type: DataTypes.FLOAT,
       allowNull: false,
     },
+    photos_household_regular: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 5, // Default value for the number of photos required
+    },
+    photos_household_solar: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 5, // Default value for the number of photos required
+    },
+    photos_industrial_regular: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 5, // Default value for the number of photos required
+    },
+    photos_industrial_solar: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 5, // Default value for the number of photos required
+    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -61,9 +81,5 @@ export const Board = sequelize.define(
   }
 );
 
-export default Board;
 
-// Associations
-Board.hasMany(User, { foreignKey: 'boardId' });
-Board.hasMany(Meter, { foreignKey: 'boardId' });
-Board.hasMany(Ticket, { foreignKey: 'boardId' });
+export default Board;

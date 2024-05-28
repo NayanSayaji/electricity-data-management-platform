@@ -2,17 +2,25 @@ import { NextFunction, Request, Response, Router } from "express";
 import { Route } from "../routes/routes.types";
 import userServices from "./users.services";
 import { ResponseHandler } from "../utils/response.handler";
-import { roleValidator } from "./users.validations";
-import { permit } from "../utils/authorizations";
+import { bulkRegistrationSchemaValidator } from "./users.validations";
+import { permit } from "../utils/authorization/authorizations";
 
 const router = Router();
 
 // get userById
-router.get('/:id', permit([]), async (req: Request<any, any, any, any>, res: Response, next: NextFunction) => {
+router.get('/:id', permit(["SUPERADMIN", "BOARD_ADMIN", "BOARD_MEMBER", "FIELD_WORKER"]), async (req, res, next) => {
     try {
-        const role_id: string = req.query.role_id || 'customer';
-        const query = { role_id: role_id }
-        const result = "userServices";
+        const result = await userServices.findUserByPk(req.params.id);
+        res.send(new ResponseHandler(result))
+    } catch (e) {
+        next(e)
+    }
+})
+
+// update user by id
+router.put('/:id', permit(["SUPERADMIN", "BOARD_ADMIN", "BOARD_MEMBER"]), async (req, res, next) => {
+    try {
+        const result = await userServices.updateUser({ id: req.params.id }, req.body);
         res.send(new ResponseHandler(result))
     } catch (e) {
         next(e)
@@ -20,11 +28,19 @@ router.get('/:id', permit([]), async (req: Request<any, any, any, any>, res: Res
 })
 
 // update user 
-router.put('/:id', permit([]), async (req: Request<any, any, any, any>, res: Response, next: NextFunction) => {
+router.put('/update', permit(["SUPERADMIN", "BOARD_ADMIN", "BOARD_MEMBER"]), async (req, res, next) => {
     try {
-        const role_id: string = req.query.role_id || 'customer';
-        const query = { role_id: role_id }
-        const result = "userServices.find (query)"
+        const result = await userServices.updateUserById(req.body.data, req.body.where);
+        res.send(new ResponseHandler(result))
+    } catch (e) {
+        next(e)
+    }
+})
+
+// delete user 
+router.delete('/:id', permit(["SUPERADMIN", "BOARD_ADMIN", "BOARD_MEMBER"]), async (req, res, next) => {
+    try {
+        const result = await userServices.deleteUser({ id: req.params.id });
         res.send(new ResponseHandler(result))
     } catch (e) {
         next(e)
@@ -32,23 +48,29 @@ router.put('/:id', permit([]), async (req: Request<any, any, any, any>, res: Res
 })
 
 // get all users
-router.get('/', permit([]), async (req: Request<any, any, any, any>, res: Response, next: NextFunction) => {
+router.get('/', permit(['SUPERADMIN', 'BOARD_ADMIN', 'BOARD_MEMBER']), async (req, res, next) => {
     try {
-        const role_id: string = req.query.role_id || 'customer';
-        const query = { role_id: role_id }
-        const result = "userServices.find(query)"
+        const result = await userServices.findAllUsers(req.body);
         res.send(new ResponseHandler(result))
     } catch (e) {
         next(e)
     }
 })
 
-// create new user
-router.post('/', permit(['superadmin','board_admin','board_member']), async (req: Request<any, any, any, any>, res: Response, next: NextFunction) => {
+// create new users in bulk
+router.post('/bulkRegister', permit(['SUPERADMIN', 'BOARD_ADMIN', 'BOARD_MEMBER']), ...bulkRegistrationSchemaValidator, async (req, res, next) => {
     try {
-        const role_id: string = req.payload.role || 'customer';
-        const query = { role_id: role_id }
-        const result = "userServices.find(query)"
+        const result = await userServices.bulkInsertUsers(req.body)
+        res.send(new ResponseHandler(result))
+    } catch (e) {
+        next(e)
+    }
+})
+
+// create new users in bulk
+router.post('/', permit(['SUPERADMIN', 'BOARD_ADMIN', 'BOARD_MEMBER']), async (req, res, next) => {
+    try {
+        const result = await userServices.insertUser(req.body);
         res.send(new ResponseHandler(result))
     } catch (e) {
         next(e)

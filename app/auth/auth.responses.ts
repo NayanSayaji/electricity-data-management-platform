@@ -21,8 +21,5 @@ export const authReponses: ResponsesI = {
         statusCode: 403,
         message: "USER ALREADY EXIST WITH THIS EMAIL"
     },
-    USER_ALREADY_EXIST_WITH_THIS_EMAIL_AND_USERNAME: {
-        statusCode: 403,
-        message: "USER ALREADY EXIST WITH THIS EMAIL AND USERNAME"
-    },
+
 }

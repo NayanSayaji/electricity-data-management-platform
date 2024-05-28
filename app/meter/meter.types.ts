@@ -8,5 +8,12 @@ export const MeterSchema = z.object({
   boardId: z.string().optional(),
 });
 
+export enum METER_TYPES {
+  HOUSEHOLD_SOLAR = 'HOUSEHOLD_SOLAR',
+  HOUSEHOLD_REGULAR = 'HOUSEHOLD_REGULAR',
+  INDUSTRIAL_SOLAR = 'INDUSTRIAL_SOLAR',
+  INDUSTRIAL_REGULAR = 'INDUSTRIAL_REGULAR'
+}
+
 export interface IMeter extends z.infer<typeof MeterSchema> {};
 export interface IMeterCreationValidatorSchema extends Pick<IMeter, 'type'> {}

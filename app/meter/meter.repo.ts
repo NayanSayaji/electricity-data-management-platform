@@ -1,6 +1,6 @@
 import { FindOptions } from "sequelize";
-import MeterModel from "./meters.schema";
-import { IMeter, IMeterCreationValidatorSchema } from "./meters.types";
+import MeterModel from "./meter.schema";
+import { IMeter, IMeterCreationValidatorSchema } from "./meter.types";
 
 const find = async (query: FindOptions<IMeter>) => {
   return await MeterModel.findAll(query);

@@ -2,7 +2,7 @@ import { Application, json, NextFunction, Request, Response, } from "express";
 import { routes } from './routes.data'
 import { ResponseHandler } from "../utils/response.handler";
 import {excludedRoutes} from './routes.data'
-import { validateToken } from "../utils/authorizations";
+import { validateToken } from "../utils/authorization/authorizations";
 import cors from 'cors'
 
 export const registerMiddlewares = (app: Application) => {

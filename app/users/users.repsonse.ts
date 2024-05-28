@@ -16,5 +16,9 @@ export const userResponses: ResponsesI = {
     USER_REGISTERED_SUCCESSFULLY: {
         message: "USER REGISTERED SUCCESSFULLY",
         statusCode: 200
-    }
+    },
+    BULK_USER_REGISTERED_SUCCESSFULLY: {
+        message: "BULK_USER REGISTERED SUCCESSFULLY",
+        statusCode: 200
+    },
 }

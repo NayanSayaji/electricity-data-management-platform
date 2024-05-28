@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { Route } from "../routes/routes.types";
 import { ResponseHandler } from "../utils/response.handler";
-import { permit } from "../utils/authorizations";
+import { permit } from "../utils/authorization/authorizations";
 
 const router = Router();
 
 // generate all bills
-router.get("/", permit(['supervisor', 'superadmin']), async (req, res, next) => {
+router.get("/", permit(['SUPERVISOR', 'SUPERADMIN']), async (req, res, next) => {
     try {
         const result = 'a ;';
         res.send(new ResponseHandler(result));
@@ -16,7 +16,7 @@ router.get("/", permit(['supervisor', 'superadmin']), async (req, res, next) => 
 });
 
 // get bill by id 
-router.get("/:id", permit(['supervisor', 'superadmin']), async (req, res, next) => {
+router.get("/:id", permit(['SUPERVISOR', 'SUPERADMIN']), async (req, res, next) => {
     try {
         const result = 'a ;';
         res.send(new ResponseHandler(result));
@@ -26,7 +26,7 @@ router.get("/:id", permit(['supervisor', 'superadmin']), async (req, res, next) 
 });
 
 // generate all bills
-router.post("/generate", permit(['supervisor', 'superadmin']), async (req, res, next) => {
+router.post("/generate", permit(['SUPERVISOR', 'SUPERADMIN']), async (req, res, next) => {
     try {
         const result = 'a ;';
         res.send(new ResponseHandler(result));

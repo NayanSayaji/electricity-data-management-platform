@@ -1,21 +1,18 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, UUID } from 'sequelize';
 import { sequelize } from '../connections/sequelize.global.instance';
 import Role from '../roles/roles.schema';
-import Board from '../boards/boards.schema';
-import Meter from '../meters/meters.schema';
-import MeterReading from '../readings/meter.readings.schema';
+import Board from '../board/board.schema';
+import MeterReading from '../meter-readings/meter.readings.schema';
 import Ticket from '../tickets/tickets.schema';
+import { v4 } from 'uuid';
 
 const User = sequelize.define(
   'User',
   {
     id: {
       type: DataTypes.UUID,
+      defaultValue: v4(),
       primaryKey: true,
-      allowNull: false,
-    },
-    username: {
-      type: DataTypes.STRING,
       allowNull: false,
     },
     firstname: {
@@ -43,16 +40,6 @@ const User = sequelize.define(
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL',
     },
-    boardId: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      references: {
-        model: Board,
-        key: 'id',
-      },
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL',
-    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -72,11 +59,10 @@ const User = sequelize.define(
   }
 );
 
-export default User;
 
-// Associations
+// Associationss
+
+User.hasOne(Role, { foreignKey: 'roleId' })
 User.belongsTo(Role, { foreignKey: 'roleId' });
-User.belongsTo(Board, { foreignKey: 'boardId' });
-User.hasMany(Meter, { foreignKey: 'userId' });
-User.hasMany(MeterReading, { foreignKey: 'fieldWorkerId' });
-User.hasMany(Ticket, { foreignKey: 'userId' });
+
+export default User;

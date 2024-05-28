@@ -5,8 +5,8 @@
 
 // const router = Router();
 
-// // get all tickets
-// router.get("/", permit(['supervisor', 'superadmin']), async (req, res, next) => {
+// // get all readings
+// router.get("/", permit(['board_admin','board_member', 'consumer', 'superadmin']), async (req, res, next) => {
 //     try {
 //         const result = 'a ;';
 //         res.send(new ResponseHandler(result));
@@ -15,8 +15,8 @@
 //     }
 // });
 
-// // get tickeyById
-// router.get("/:id", permit(['supervisor', 'superadmin']), async (req, res, next) => {
+// // get readingById
+// router.get("/:id", permit(['board_admin','board_member', 'consumer', 'superadmin']), async (req, res, next) => {
 //     try {
 //         const result = 'a ;';
 //         res.send(new ResponseHandler(result));
@@ -25,8 +25,8 @@
 //     }
 // });
 
-// // update ticket
-// router.put("/:id", permit(['consumer']), async (req, res, next) => {
+// // update reading
+// router.put("/:id", permit(['field_worker', 'superadmin']), async (req, res, next) => {
 //     try {
 //         const result = 'a ;';
 //         res.send(new ResponseHandler(result));
@@ -35,8 +35,8 @@
 //     }
 // });
 
-// // create new ticket
-// router.post("/", permit(['consumer']), async (req, res, next) => {
+// // create new reading
+// router.post("/", permit(['field_worker', 'superadmin']), async (req, res, next) => {
 //     try {
 //         const result = 'a ;';
 //         res.send(new ResponseHandler(result));
@@ -45,4 +45,4 @@
 //     }
 // });
 
-// export default new Route("/tickets", router);
+// export default new Route("/readings", router);
